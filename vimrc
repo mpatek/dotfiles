@@ -11,8 +11,6 @@ set number
 set ignorecase
 colorscheme torte
 
-"filetype plugin on
-"filetype indent on
 set nobackup
 set noswapfile
 
