@@ -1,67 +1,84 @@
+set nocompatible  " required
 filetype off
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
 
-set sw=4
-set ts=4
-set sts=4
-set et
-set sta
-set number
-set ignorecase
-colorscheme torte
+" set the runtime path to include Vundle and initialize
 
-set nobackup
-set noswapfile
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-set foldmethod=indent
-set foldlevel=99
+" let Vundle manage Vundle. required
+Plugin 'gmarik/Vundle.vim'
 
-map <c-j> <c-w>j
-map <c-k> <c-w>k
-map <c-l> <c-w>l
-map <c-h> <c-w>h
+" Add all plugins here
 
-map <leader>td <Plug>TaskList
-map <leader>g :GundoToggle<CR>
-map <leader>n :NERDTreeToggle<CR>
-map <leader>j :RopeGotoDefinition<CR>
-map <leader>r :RopeRename<CR>
-map <Leader>mg :call MakeGreen()<CR>
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'nvie/vim-flake8'
+Plugin 'jnurmine/Zenburn'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-rhubarb'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'ervandew/supertab'
+Plugin 'vim-airline/vim-airline'
+Plugin 'alvan/vim-closetag'
+Plugin 'thalesmello/lkml.vim'
+Plugin 'duganchen/vim-soy'
+Plugin 'isRuslan/vim-es6'
 
-" Execute the tests
-nmap <silent><Leader>tf <Esc>:Pytest file<CR>
-nmap <silent><Leader>tc <Esc>:Pytest class<CR>
-nmap <silent><Leader>tm <Esc>:Pytest method<CR>
-" cycle through test errors
-nmap <silent><Leader>tn <Esc>:Pytest next<CR>
-nmap <silent><Leader>tp <Esc>:Pytest previous<CR>
-nmap <silent><Leader>te <Esc>:Pytest error<CR>
+" All plugins must be added before following line
+call vundle#end()   " required
+filetype plugin indent on    " required
 
-nmap <leader>a <Esc>:Ack!
+au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix
+au BufNewFile,BufRead *.json set tabstop=4 softtabstop=4 shiftwidth=4 expandtab autoindent fileformat=unix
+au BufNewFile,BufRead *.js set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 noexpandtab autoindent fileformat=unix
+au BufNewFile,BufRead *.sql set tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab autoindent fileformat=unix
+au BufNewFile,BufRead *.scala set autoindent noexpandtab tabstop=4 shiftwidth=4
+au BufNewFile,BufRead *.lkml set tabstop=2 softtabstop=2 shiftwidth=2 expandtab autoindent fileformat=unix filetype=lkml
+au BufNewFile,BufRead *.html set noexpandtab copyindent preserveindent softtabstop=0 shiftwidth=4 tabstop=4 textwidth=0 fileformat=unix
 
+set encoding=utf-8
+
+let python_highlight_all=1
 syntax on
-filetype on
-filetype plugin indent on
 
-let g:pyflakes_use_quickfix = 0
-let g:pep8_map='<leader>8'
+if has('gui_running')
+	set background=dark
+	colorscheme solarized
+else
+	colorscheme zenburn
+endif
 
-au FileType python set omnifunc=pythoncomplete#Complete
-let g:SuperTabDefaultCompletionType = "context"
-set completeopt=menuone,longest,preview
+set nu
 
-let g:pydoc_perform_mappings = 1
-let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+set term=screen-256color
 
-set statusline=%t "tail of the filename
-set statusline+=%m "modified flag
-set statusline+=%r "read only flag
-set statusline+=%y "filetype
-set statusline+=%{fugitive#statusline()} "git status
-set statusline+=%= "right/left separator
-set statusline+=%c, "cursor column
-set statusline+="%l/%L "cursor line/total lines
-set statusline+=\ %P "percent through file
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
-autocmd FileType python compiler pylint
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
+set laststatus=2
+
+" remove trailing spaces on save
+autocmd BufWritePre *.py :%s/\s\+$//e
+
+let g:flake8_cmd="/home/mpatek/miniconda3/bin/flake8"
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" filenames like *.xml, *.html, *.xhtml, ...
+let g:closetag_filenames = "*.html,*.xhtml,*.phtml"
+
+set nofoldenable
